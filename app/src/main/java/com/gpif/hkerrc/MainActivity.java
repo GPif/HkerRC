@@ -5,6 +5,12 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.gpif.hkerrc.cmds.Commands;
+import com.gpif.hkerrc.cmds.WOLCommands;
+
+import java.util.ArrayList;
+import java.util.List;
+
 
 public class MainActivity extends ListActivity {
 
@@ -13,11 +19,9 @@ public class MainActivity extends ListActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        String[] values = new String[] { "Android", "iPhone", "WindowsMobile",
-                "Blackberry", "WebOS", "Ubuntu", "Windows7", "Max OS X",
-                "Linux", "OS/2", "Ubuntu", "Windows7", "Max OS X", "Linux",
-                "OS/2", "Ubuntu", "Windows7", "Max OS X", "Linux", "OS/2",
-                "Android", "iPhone", "WindowsMobile" };
+        List<Commands> values = new ArrayList<Commands>();
+        values.add(new WOLCommands("Wake Server","127.0.0.1","AA:BB:CC:DD:EE"));
+
         CmdAdapter adapter = new CmdAdapter(this, values);
         setListAdapter(adapter);
 

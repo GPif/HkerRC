@@ -1,4 +1,4 @@
-package com.gpif.hkerrc.com.gpif.hkerrc.cmds;
+package com.gpif.hkerrc.cmds;
 
 import android.app.Activity;
 import android.os.AsyncTask;
