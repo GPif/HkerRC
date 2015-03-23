@@ -3,6 +3,7 @@ package com.gpif.hkerrc;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,22 +12,21 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
-import com.gpif.hkerrc.cmds.Commands;
+import com.gpif.hkerrc.cmds.Command;
+import com.gpif.hkerrc.cmds.CommandsCollection;
 
-import java.util.List;
 
-
-public class CmdAdapter extends ArrayAdapter<Commands> {
+public class CmdAdapter extends ArrayAdapter<Command> {
     private final Activity context;
-    private final List<Commands> values;
+    private final CommandsCollection values;
 
     static class ViewHolder {
         protected Button action_b;
         protected ImageButton config_b;
         protected ImageButton delete_b;
     }
-    public CmdAdapter(Activity context, List<Commands> values) {
-        super(context, R.layout.rowlayout, values);
+    public CmdAdapter(Activity context, CommandsCollection values) {
+        super(context, R.layout.rowlayout, values.getArray());
         this.context = context;
         this.values = values;
     }
@@ -50,6 +50,16 @@ public class CmdAdapter extends ArrayAdapter<Commands> {
                     CharSequence text = "Hello " + values.get(position).getName() ;
                     Toast toast = Toast.makeText(context, text, Toast.LENGTH_SHORT);
                     toast.show();
+                }
+            });
+
+            viewHolder.config_b.setOnClickListener(new View.OnClickListener(){
+                @Override
+                public void onClick(View v) {
+                    Intent cint = new Intent(context, values.get(position).getConfigActivityClass());
+                    cint.putExtra("cmd_list", values);
+                    cint.putExtra("list_position",position);
+                    context.startActivityForResult(cint,1);
                 }
             });
 
@@ -77,4 +87,5 @@ public class CmdAdapter extends ArrayAdapter<Commands> {
         }
         return rowView;
     }
+
 }

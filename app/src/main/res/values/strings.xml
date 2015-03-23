@@ -3,4 +3,8 @@
 
     <string name="new_cmd">Add new</string>
     <string name="action_settings">Settings</string>
+    <string name="wol_config_title">Wake On Lan Config</string>
+    <string name="ip_text_desc">IP to send the packet :</string>
+    <string name="mac_text_desc">MAC address to send packet :</string>
+    <string name="save_str">Save</string>
 </resources>

@@ -1,32 +1,45 @@
 package com.gpif.hkerrc;
 
 import android.app.ListActivity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
-import com.gpif.hkerrc.cmds.Commands;
-import com.gpif.hkerrc.cmds.WOLCommands;
-
-import java.util.ArrayList;
-import java.util.List;
+import com.gpif.hkerrc.cmds.CommandsCollection;
+import com.gpif.hkerrc.cmds.WOLCommand;
 
 
 public class MainActivity extends ListActivity {
+    private CommandsCollection values;
+    private CmdAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        List<Commands> values = new ArrayList<Commands>();
-        values.add(new WOLCommands("Wake Server","127.0.0.1","AA:BB:CC:DD:EE"));
+        values = new CommandsCollection();
+        values.add(new WOLCommand("Wake Server","127.0.0.1","AA:BB:CC:DD:EE"));
 
-        CmdAdapter adapter = new CmdAdapter(this, values);
+        adapter = new CmdAdapter(this, values);
         setListAdapter(adapter);
 
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == RESULT_OK) {
+            this.values = (CommandsCollection) data.getSerializableExtra("cmd_list");
+            adapter = new CmdAdapter(this, values);
+            setListAdapter(adapter);
+            adapter.notifyDataSetChanged();
+            Toast toast = Toast.makeText(this, "Update succes : " + values.get(0).getName(), Toast.LENGTH_SHORT);
+            toast.show();
+        }
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
