@@ -1,13 +1,32 @@
 package com.gpif.hkerrc.cmds;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonElement;
+import com.google.gson.reflect.TypeToken;
 import com.gpif.hkerrc.WolConfigActivity;
 
-import java.io.Serializable;
+import java.lang.reflect.Type;
 
-public class WOLCommand implements Command, Serializable {
+public class WOLCommand implements Command {
     public String name;
     public String ip;
     public String mac;
+
+    public WOLCommand(String name, String ip, String mac) {
+        this.name = name;
+        this.ip = ip;
+        this.mac = mac;
+    }
+
+    public WOLCommand(String name) {
+        this.name = name;
+    }
+
+    public static WOLCommand fromJsonElement(JsonElement jso) {
+        Gson g = new Gson();
+        Type wolType = new TypeToken<WOLCommand>() {}.getType();
+        return ((WOLCommand) g.fromJson(jso,wolType ));
+    }
 
     public void setName(String name) {
         this.name = name;
@@ -29,14 +48,15 @@ public class WOLCommand implements Command, Serializable {
         this.mac = mac;
     }
 
-    public WOLCommand(String name, String ip, String mac) {
-        this.name = name;
-        this.ip = ip;
-        this.mac = mac;
+    @Override
+    public JsonElement getJsonElement() {
+        Gson g = new Gson();
+        return g.toJsonTree(this);
     }
 
-    public WOLCommand(String name) {
-        this.name = name;
+    @Override
+    public String getClassName() {
+        return "WOLCommand";
     }
 
     @Override

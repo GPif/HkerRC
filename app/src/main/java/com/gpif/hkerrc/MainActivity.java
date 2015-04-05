@@ -7,9 +7,12 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.gpif.hkerrc.cmds.ComCollDeserializer;
+import com.gpif.hkerrc.cmds.ComCollSerializer;
 import com.gpif.hkerrc.cmds.CommandsCollection;
 import com.gpif.hkerrc.cmds.WOLCommand;
-
 
 public class MainActivity extends ListActivity {
     private CommandsCollection values;
@@ -23,7 +26,12 @@ public class MainActivity extends ListActivity {
         values = new CommandsCollection();
         values.add(new WOLCommand("Wake Server","127.0.0.1","AA:BB:CC:DD:EE"));
 
+        values.saveConf(this);
+
+        //CommandsCollection coll  = CommandsCollection.loadConf(this);
+
         adapter = new CmdAdapter(this, values);
+
         setListAdapter(adapter);
 
     }
@@ -32,7 +40,15 @@ public class MainActivity extends ListActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == RESULT_OK) {
-            this.values = (CommandsCollection) data.getSerializableExtra("cmd_list");
+
+            String json = data.getExtras().getString("cmd_list");
+
+            GsonBuilder gson = new GsonBuilder();
+            gson.registerTypeAdapter(CommandsCollection.class, new ComCollSerializer());
+            gson.registerTypeAdapter(CommandsCollection.class, new ComCollDeserializer());
+
+            Gson g = gson.create();
+            this.values = g.fromJson(json,CommandsCollection.class);
             adapter = new CmdAdapter(this, values);
             setListAdapter(adapter);
             adapter.notifyDataSetChanged();

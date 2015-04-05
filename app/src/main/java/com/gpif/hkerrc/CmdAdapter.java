@@ -12,6 +12,10 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.gpif.hkerrc.cmds.ComCollSerializer;
+import com.gpif.hkerrc.cmds.ComCollDeserializer;
 import com.gpif.hkerrc.cmds.Command;
 import com.gpif.hkerrc.cmds.CommandsCollection;
 
@@ -57,7 +61,16 @@ public class CmdAdapter extends ArrayAdapter<Command> {
                 @Override
                 public void onClick(View v) {
                     Intent cint = new Intent(context, values.get(position).getConfigActivityClass());
-                    cint.putExtra("cmd_list", values);
+                    GsonBuilder gson = new GsonBuilder();
+                    gson.registerTypeAdapter(CommandsCollection.class, new ComCollSerializer());
+                    gson.registerTypeAdapter(CommandsCollection.class, new ComCollDeserializer());
+
+                    Gson g = gson.create();
+                    String str = g.toJson(values);
+
+                    //CommandsCollection cmdcoll = g.fromJson(str,CommandsCollection.class);
+
+                    cint.putExtra("cmd_list", str);
                     cint.putExtra("list_position",position);
                     context.startActivityForResult(cint,1);
                 }

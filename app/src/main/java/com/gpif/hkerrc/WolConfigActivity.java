@@ -7,6 +7,10 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.gpif.hkerrc.cmds.ComCollDeserializer;
+import com.gpif.hkerrc.cmds.ComCollSerializer;
 import com.gpif.hkerrc.cmds.CommandsCollection;
 import com.gpif.hkerrc.cmds.WOLCommand;
 
@@ -19,7 +23,14 @@ public class WolConfigActivity extends Activity {
         Intent wolConfig = getIntent();
 
         final Integer position = wolConfig.getExtras().getInt("position");
-        final CommandsCollection values = (CommandsCollection) wolConfig.getSerializableExtra("cmd_list");
+        String json = wolConfig.getExtras().getString("cmd_list");
+
+        GsonBuilder gson = new GsonBuilder();
+        gson.registerTypeAdapter(CommandsCollection.class, new ComCollSerializer());
+        gson.registerTypeAdapter(CommandsCollection.class, new ComCollDeserializer());
+
+        final Gson g = gson.create();
+        final CommandsCollection values = g.fromJson(json,CommandsCollection.class);
 
         final EditText nameView = (EditText) findViewById(R.id.nameText);
         final EditText ipView = (EditText) findViewById(R.id.ipText) ;
@@ -37,7 +48,8 @@ public class WolConfigActivity extends Activity {
                 values.set(position,cmd);
 
                 Intent send2Main = new Intent();
-                send2Main.putExtra("cmd_list", values);
+                String json = g.toJson(values);
+                send2Main.putExtra("cmd_list", json);
                 setResult(RESULT_OK,send2Main);
                 finish();
             }
