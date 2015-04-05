@@ -28,7 +28,7 @@ public class MainActivity extends ListActivity {
 
         values.saveConf(this);
 
-        //CommandsCollection coll  = CommandsCollection.loadConf(this);
+        CommandsCollection coll  = CommandsCollection.loadConf(this);
 
         adapter = new CmdAdapter(this, values);
 
