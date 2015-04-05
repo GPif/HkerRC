@@ -10,8 +10,6 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.FileReader;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -47,14 +45,11 @@ public class CommandsCollection implements Serializable{
         this.array.set(position, cmd);
     }
 
+
     public void saveConf(Context c) {
         if (isExternalStorageWritable()){
             //Convert to json string
-            GsonBuilder gson = new GsonBuilder();
-            gson.registerTypeAdapter(CommandsCollection.class, new ComCollSerializer());
-            gson.registerTypeAdapter(CommandsCollection.class, new ComCollDeserializer());
-            Gson g = gson.create();
-            String json = g.toJson(this);
+            String json = this.toJson();
 
             File file = new File(c.getExternalFilesDir(null), confFile);
             try {
@@ -84,15 +79,31 @@ public class CommandsCollection implements Serializable{
                     e.printStackTrace();
                 }
                 //Convert to collection
-                GsonBuilder gson = new GsonBuilder();
-                gson.registerTypeAdapter(CommandsCollection.class, new ComCollSerializer());
-                gson.registerTypeAdapter(CommandsCollection.class, new ComCollDeserializer());
-                Gson g = gson.create();
-                CommandsCollection coll = g.fromJson(json.toString(),CommandsCollection.class);
+                CommandsCollection coll = CommandsCollection.createFromJson(json.toString());
+
                 return coll;
             }
         }
         return null;
+    }
+
+    public String toJson() {
+        GsonBuilder gson = new GsonBuilder();
+        gson.registerTypeAdapter(CommandsCollection.class, new ComCollSerializer());
+        gson.registerTypeAdapter(CommandsCollection.class, new ComCollDeserializer());
+
+        Gson g = gson.create();
+        return g.toJson(this);
+    }
+
+    public static CommandsCollection createFromJson(String json) {
+        GsonBuilder gson = new GsonBuilder();
+        gson.registerTypeAdapter(CommandsCollection.class, new ComCollSerializer());
+        gson.registerTypeAdapter(CommandsCollection.class, new ComCollDeserializer());
+
+        Gson g = gson.create();
+        CommandsCollection coll = g.fromJson(json,CommandsCollection.class);
+        return coll;
     }
 
     /* Checks if external storage is available for read and write */
