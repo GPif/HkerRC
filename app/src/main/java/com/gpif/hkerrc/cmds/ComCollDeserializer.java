@@ -18,12 +18,9 @@ public class ComCollDeserializer implements JsonDeserializer<CommandsCollection>
         List<Command> array = new ArrayList<>();
         for (int i = 0; i < arr.size() ; i++) {
             JsonObject jso = (JsonObject) arr.get(i);
-            if (jso.getAsJsonPrimitive("command_class").getAsString()
-                    .equals((new WOLCommand(null).getClassName()))) {
-                JsonElement cmdjson = jso.getAsJsonObject("command_value");
-                WOLCommand wol = WOLCommand.fromJsonElement(cmdjson);
-                array.add(wol);
-            }
+            JsonElement cmdjson = jso.getAsJsonObject("command_value");
+            String cmd_class = jso.getAsJsonPrimitive("command_class").getAsString();
+            array.add(CommandFactory.getFromJson(cmd_class,cmdjson));
         }
         CommandsCollection coll = new CommandsCollection();
         coll.setArray(array);
