@@ -60,7 +60,9 @@ public class MainActivity extends ListActivity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        if (id == R.id.new_cmd) {
+            Intent cint = new Intent(this, NewCmdActivity.class);
+            startActivity(cint);
             return true;
         }
 
