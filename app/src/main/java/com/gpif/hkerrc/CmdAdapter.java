@@ -57,13 +57,8 @@ public class CmdAdapter extends ArrayAdapter<Command> {
                 @Override
                 public void onClick(View v) {
                     Intent cint = new Intent(context, values.get(position).getConfigActivityClass());
-                    String str = values.toJson();
-
-                    //CommandsCollection cmdcoll = g.fromJson(str,CommandsCollection.class);
-
-                    cint.putExtra("cmd_list", str);
                     cint.putExtra("list_position",position);
-                    context.startActivityForResult(cint,1);
+                    context.startActivity(cint);
                 }
             });
 

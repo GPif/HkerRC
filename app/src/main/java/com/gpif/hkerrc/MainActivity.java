@@ -29,23 +29,6 @@ public class MainActivity extends ListActivity {
     }
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode == RESULT_OK) {
-            String json = data.getExtras().getString("cmd_list");
-            this.values = CommandsCollection.createFromJson(json);
-            adapter = new CmdAdapter(this, values);
-            setListAdapter(adapter);
-            adapter.notifyDataSetChanged();
-            Toast toast = Toast.makeText(this, "Update succes : " + values.get(0).getName(), Toast.LENGTH_SHORT);
-            toast.show();
-
-            //Save configuration
-            this.values.saveConf(this);
-        }
-    }
-
-    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);

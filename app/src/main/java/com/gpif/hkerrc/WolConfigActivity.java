@@ -19,9 +19,8 @@ public class WolConfigActivity extends Activity {
         Intent wolConfig = getIntent();
 
         final Integer position = wolConfig.getExtras().getInt("position");
-        String json = wolConfig.getExtras().getString("cmd_list");
 
-        final CommandsCollection values = CommandsCollection.createFromJson(json);
+        final CommandsCollection values = CommandsCollection.loadConf(this);
 
         final EditText nameView = (EditText) findViewById(R.id.nameText);
         final EditText ipView = (EditText) findViewById(R.id.ipText) ;
@@ -37,11 +36,7 @@ public class WolConfigActivity extends Activity {
 
                 WOLCommand cmd = new WOLCommand(name,ip,mac);
                 values.set(position,cmd);
-
-                Intent send2Main = new Intent();
-                String json = values.toJson();
-                send2Main.putExtra("cmd_list", json);
-                setResult(RESULT_OK,send2Main);
+                values.saveConf(getApplicationContext());
                 finish();
             }
         });
