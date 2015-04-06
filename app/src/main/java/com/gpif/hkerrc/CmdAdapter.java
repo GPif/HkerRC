@@ -57,6 +57,7 @@ public class CmdAdapter extends ArrayAdapter<Command> {
                 @Override
                 public void onClick(View v) {
                     Intent cint = new Intent(context, values.get(position).getConfigActivityClass());
+                    cint.putExtra("action","edit");
                     cint.putExtra("list_position",position);
                     context.startActivity(cint);
                 }
@@ -73,6 +74,7 @@ public class CmdAdapter extends ArrayAdapter<Command> {
                     adb.setPositiveButton("Ok", new AlertDialog.OnClickListener() {
                         public void onClick(DialogInterface dialog, int which) {
                             values.remove(position);
+                            values.saveConf(getContext());
                             notifyDataSetChanged();
                         }});
                     adb.show();
