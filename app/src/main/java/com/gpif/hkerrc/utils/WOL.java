@@ -12,7 +12,7 @@ public class WOL {
     public WOL(String _ip, String _mac, String _port) {
         ip   = _ip;
         mac  = _mac;
-        port = Integer.parseInt(_port);;
+        port = Integer.parseInt(_port);
     }
 
     public WOL(String _ip, String _mac) {
@@ -44,8 +44,7 @@ public class WOL {
             System.out.println("Wake-on-LAN packet sent.");
         }
         catch (Exception e) {
-            System.out.println("Failed to send Wake-on-LAN packet:" + e);
-            System.exit(1);
+            e.printStackTrace();
         }
         return 0;
     }

@@ -9,4 +9,5 @@ public interface Command extends Serializable{
     Class getConfigActivityClass();
     String getClassName();
     JsonElement getJsonElement();
+    void run();
 }

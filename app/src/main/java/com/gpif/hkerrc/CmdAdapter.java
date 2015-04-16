@@ -47,7 +47,8 @@ public class CmdAdapter extends ArrayAdapter<Command> {
             viewHolder.action_b.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    CharSequence text = "Hello " + values.get(position).getName() ;
+                    values.get(position).run();
+                    CharSequence text = "Run " + values.get(position).getName() ;
                     Toast toast = Toast.makeText(context, text, Toast.LENGTH_SHORT);
                     toast.show();
                 }
