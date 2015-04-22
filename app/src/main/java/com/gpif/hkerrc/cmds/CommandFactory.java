@@ -1,6 +1,7 @@
 package com.gpif.hkerrc.cmds;
 
 import com.google.gson.JsonElement;
+import com.gpif.hkerrc.cmds.ssh.SSHCommand;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -13,12 +14,19 @@ public class CommandFactory {
         if(class_name.equals(wol.getClassName())) {
             return wol;
         }
+        SSHCommand ssh = new SSHCommand();
+        if(class_name.equals(ssh.getClassName())) {
+            return ssh;
+        }
         return null;
     }
 
     public static Command getFromJson(String class_name, JsonElement elt) {
         if(class_name.equals((new WOLCommand(null)).getClassName())) {
             return WOLCommand.fromJsonElement(elt);
+        }
+        if(class_name.equals((new SSHCommand()).getClassName())) {
+            return SSHCommand.fromJsonElement(elt);
         }
         return null;
     }
@@ -35,5 +43,10 @@ public class CommandFactory {
         mMap.put("name","Wake On LAN command");
         mMap.put("class_name",wol.getClassName());
         list.add(mMap);
+        HashMap mMap2 = new HashMap();
+        SSHCommand ssh = new SSHCommand();
+        mMap2.put("name", "SSH command");
+        mMap2.put("class_name",ssh.getClassName());
+        list.add(mMap2);
     }
 }
